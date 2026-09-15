@@ -63,13 +63,13 @@ void func_80105B9C_3D8C8C_duel01(void) {
     omOvlReturnEx(1);
 }
 
-void func_80105C64_3D8D54_duel01(s32 arg0, s32 arg1, unkStruct01 *arg2) {
+void func_80105C64_3D8D54_duel01(Vec* arg0, Vec* arg1, Vec *arg2) {
     f32 temp_f20;
 
-    func_800EB708_D34D8_name_81(arg0, arg1, arg2);
-    temp_f20 = func_800D76D0_BF4A0_name_81(arg2) + 15.0f;
-    arg2->unk_00 = HuMathSin(temp_f20);
-    arg2->unk_08 = HuMathCos(temp_f20);
+    MBDVecDirGet(arg0, arg1, arg2);
+    temp_f20 = MBDVecAngleGet(arg2) + 15.0f;
+    arg2->x = HuMathSin(temp_f20);
+    arg2->z = HuMathCos(temp_f20);
 }
 
 INCLUDE_ASM("asm/nonmatchings/overlays/duel01/3D8AC0", func_80105CC0_3D8DB0_duel01);

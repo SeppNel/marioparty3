@@ -52,6 +52,34 @@ typedef struct UnkBoard5 {
     /* 0x1C */ s16* unk_1C;
 } UnkBoard5; //sizeof 0x20
 
+typedef struct UnkBE940_2 {
+    /* 0x00 */ s16 unk_00;
+    /* 0x02 */ s16 unk_02;
+    /* 0x04 */ s32 unk_04;
+    /* 0x08 */ s32 unk_08;
+    /* 0x0C */ s16 unk_0C;
+    /* 0x0E */ char unk_0E[0x5A];
+    /* 0x68 */ s32 unk_68;
+} UnkBE940_2; // sizeof 0x6C
+
+// same as Object, but with an extra 4 bytes
+typedef struct ObjectName {
+    /* 0x00 */ struct ObjectName *prev;
+    /* 0x04 */ struct ObjectName *next;
+    /* 0x08 */ u8 unk8;
+    /* 0x09 */ s8 unk9;
+    /* 0x0A */ u16 flags;
+    /* 0x0C */ Vec coords;
+    /* 0x18 */ Vec rot;
+    /* 0x24 */ Vec scale;
+    /* 0x30 */ Vec velocity;
+    /* 0x3C */ omObjData* omObj1;
+    /* 0x40 */ omObjData* omObj2; 
+    /* 0x44 */ s16 unk44;
+    /* 0x46 */ s16 unk46;
+    /* 0x48 */ s16 unk48;
+} ObjectName; // sizeof 0x4C
+
 extern UnkBoard4* D_80105400_ED1D0_name_81;
 extern u16 D_80105404_ED1D4_name_81;
 extern PartnerBaseAttributes PartnersBaseStats[];
@@ -120,7 +148,7 @@ void func_80100124_E7EF4_name_81(UnkBoard4*, s32);
 Object* func_800D8314_C00E4_name_81(s32, s32, f32, f32, s32);
 void func_800FCF50_E4D20_name_81(s32, s32);
 void func_800D8E88_C0C58_name_81(Object*);
-void func_800D8F3C_C0D0C_name_81(Object*);
+void func_800D8F3C_C0D0C_name_81(ObjectName*);
 void func_800F8C68_E0A38_name_81(s32);
 void func_80100604_E83D4_name_81(void);
 s32 func_800F89D0_E07A0_name_81(s32 playerIndex, s32 frontOrBackIndex, s16 arg2, s16 arg3);
@@ -160,8 +188,8 @@ void func_800D8F0C_C0CDC_name_81(Object*);
 GW_PLAYER* MBDGetPlayerStruct(s32 playerIndex);
 Object* MBDGetPlayerPartnerRef(s32 playerIndex, s32 frontOrBackIndex);
 void func_800ECF1C_D4CEC_name_81(s32, Vec*, Vec*);
-void func_800D7828_BF5F8_name_81(Vec*);
-void func_800D7934_BF704_name_81(Vec*, f32);
+void MBDVecNormalize(Vec*);
+void MBDVecRotateY(Vec*, f32);
 void func_800D7EB8_BFC88_name_81(void);
 void func_800D8944_C0714_name_81(Object*);
 void func_800DAB1C_C28EC_name_81(void);
@@ -251,10 +279,14 @@ void func_800FAC4C_E2A1C_name_81(void);
 void func_800FAEE8_E2CB8_name_81(void);
 void func_800FAFAC_E2D7C_name_81(void);
 void func_800FC888_E4658_name_81(s32);
-void func_800FC8C4_E4694_name_81(Vec*);
 Vec* func_800FC8D0_E46A0_name_81(void);
 void func_800FFAE0_E78B0_name_81(s16, s16);
 void func_800EB49C_D326C_name_81(s16 arg0, s32 arg1, s32 arg2, s32 arg3, s32 arg4, s32 arg5, s32 arg6);
 void func_800D85A8_C0378_name_81(f32);
 void func_800D87DC_C05AC_name_81(f32);
 void func_800EF3EC_D71BC_name_81(s32);
+void MBDVecDirGet(Vec*, Vec*, Vec*);
+UnkEA790Struct *func_800D6C6C_BEA3C_name_81(void);
+SpaceData* MBDMasuGet(s16 spaceIdx);
+void *func_800D6B70_BE940_name_81(s32 arg0);
+void func_800D6D2C_BEAFC_name_81(UnkEA790Struct *arg0, UnkBoard2 *arg1, u16 arg2);

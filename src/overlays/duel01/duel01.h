@@ -45,8 +45,8 @@ typedef struct unkStruct06 {
 } unkStruct06;
 
 extern s16 omovlevtno;
-f32 func_800D76D0_BF4A0_name_81(void*);
-void func_80100CEC_E8ABC_name_81(u8);
+f32 MBDVecAngleGet(void*);
+void func_80100CEC_E8ABC_name_81(s32);
 s32 func_800E1824_C95F4_name_81(s32, s32, s32);
 s32 func_800E88FC_D06CC_name_81(void);
 void func_800E1854_C9624_name_81(s32);
@@ -56,16 +56,16 @@ extern s32 D_80119478_3EC568_duel01;
 extern s32 D_8011947C_3EC56C_duel01;
 void func_800E94D0_D12A0_name_81(void);
 void func_800E9564_D1334_name_81(void);
-void func_800E9B10_D18E0_name_81(s32, s32);
+void func_800E9B10_D18E0_name_81(s32, s16);
 void func_800E9D9C_D1B6C_name_81(void);
 void func_800E9F4C_D1D1C_name_81(s32, s8*, s8*);
 void func_800EA760_D2530_name_81(void);
 void func_800ECD0C_D4ADC_name_81(s32, s8, s8);
-void func_800EB708_D34D8_name_81(s32, s32, unkStruct01*);
+void MBDVecDirGet(Vec*, Vec*, Vec*);
 unkStruct03* func_80047EA0_48AA0(void*, s32, s32, s32);
 void func_80105CC0_3D8DB0_duel01(void); //probably takes object as arg
-void func_800FC8C4_E4694_name_81(void*);
-extern s32 D_80105540_ED310_name_81;
+void func_800FC8C4_E4694_name_81(Vec*);
+extern Vec D_80105540_ED310_name_81;
 void func_800EC1E4_D3FB4_name_81(void*, s32, void*, f32);
 void func_800EBF2C_D3CFC_name_81(void*, s32, void*);
 void func_80106308_3D93F8_duel01(void);

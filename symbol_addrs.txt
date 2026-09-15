@@ -1162,6 +1162,13 @@ MBDCameraSpeedSet = 0x800E88E4; //rom:0xD06B4 segment:name_81
 MBDCameraSpeedGet = 0x800E88F0; //rom:0xD06C0 segment:name_81
 MBDCameraBackOffsetSet = 0x800E8A1C; //rom:0xD07EC segment:name_81
 
+MBDVecDirGet = 0x800eb708; //segment:name_81
+MBDVecAngleGet = 0x800d76d0; //segment:name_81
+MBDVecNormalize = 0x800d7828; //segment:name_81
+MBDVecRotateX = 0x800d7898; //segment:name_81
+MBDVecRotateY = 0x800d7934; //segment:name_81
+MBDVecRotateZ = 0x800d79d0; //segment:name_81
+
 D_800D1708_D2308 = 0x800D1708; //type:u16
 D_800D4080_D4C80 = 0x800D4080; //type:s16
 kakusiMasuItemHisIdx = 0x800D1F7A; //type:s16

@@ -7,16 +7,6 @@ typedef struct UnkBE940 {
     /* 0x04 */ Object *unk_04;
 } UnkBE940; // sizeof 0x08
 
-typedef struct UnkBE940_2 {
-    /* 0x00 */ s16 unk_00;
-    /* 0x02 */ s16 unk_02;
-    /* 0x04 */ s32 unk_04;
-    /* 0x08 */ s32 unk_08;
-    /* 0x0C */ s16 unk_0C;
-    /* 0x0E */ char unk_0E[0x5A];
-    /* 0x68 */ s32 unk_68;
-} UnkBE940_2; // sizeof 0x6C
-
 typedef struct UnkBE940_3 {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ s16 unk_02;
@@ -45,16 +35,16 @@ void func_800D6C3C_BEA0C_name_81(UnkBE940 *arg0) {
     HuMemMemoryFreeTemp(arg0);
 }
 
-UnkBE940_2 *func_800D6C6C_BEA3C_name_81(void) {
-    UnkBE940_2 *temp_v0;
+UnkEA790Struct *func_800D6C6C_BEA3C_name_81(void) {
+    UnkEA790Struct *temp_v0;
 
-    temp_v0 = HuMemMemoryAllocTemp(sizeof(UnkBE940_2));
+    temp_v0 = HuMemMemoryAllocTemp(sizeof(UnkEA790Struct));
     temp_v0->unk_00 = 0;
     temp_v0->unk_02 = 0;
     temp_v0->unk_04 = 0;
-    temp_v0->unk_08 = 0;
+    temp_v0->proc = 0;
     temp_v0->unk_0C = 0;
-    temp_v0->unk_68 = 0;
+    temp_v0->player = 0;
     return temp_v0;
 }
 

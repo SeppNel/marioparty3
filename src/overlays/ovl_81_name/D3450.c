@@ -5,7 +5,7 @@ INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/D3450", func_800EB680_D3450_n
 
 INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/D3450", func_800EB6C4_D3494_name_81);
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/D3450", func_800EB708_D34D8_name_81);
+INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/D3450", MBDVecDirGet);
 
 INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/D3450", func_800EB740_D3510_name_81);
 
@@ -94,7 +94,7 @@ void func_800ED214_D4FE4_name_81(s32 playerIndex) {
         partner = MBDGetPlayerPartnerRef(playerIndex, PARTNER_FRONT);
         HuVecCopy3F(&partner->coords, &player->player_obj->coords);
         HuVecAdd(&partner->coords, &partner->coords, &sp10);
-        func_800D7828_BF5F8_name_81(&sp10);
+        MBDVecNormalize(&sp10);
         HuVecCopy3F(&partner->rot, &sp10);
     }
 
@@ -102,8 +102,8 @@ void func_800ED214_D4FE4_name_81(s32 playerIndex) {
         partner = MBDGetPlayerPartnerRef(playerIndex, PARTNER_BACK);
         HuVecCopy3F(&partner->coords, &player->player_obj->coords);
         HuVecAdd(&partner->coords, &partner->coords, &sp20);
-        func_800D7828_BF5F8_name_81(&sp20);
-        func_800D7934_BF704_name_81(&sp20, 180.0f);
+        MBDVecNormalize(&sp20);
+        MBDVecRotateY(&sp20, 180.0f);
         HuVecCopy3F(&partner->rot, &sp20);
     }
 }

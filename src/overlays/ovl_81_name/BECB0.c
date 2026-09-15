@@ -2,6 +2,12 @@
 #include "ovl_81.h"
 
 UnkBoard2* func_800D6EC8_BEC98_name_81(UnkEA790Struct*, s16);
+s16 func_800EBA50_D3820_name_81(s16, f32);
+f32 func_800D7CEC_BFABC_name_81(Vec*, Vec*);
+f32 _atan2d(f32, f32);
+void HuVecNormalize3F(Vec *);
+f32 func_8008D800_8E400(f32);
+f32 HuVecDot3F(Vec *, Vec *);
 
 static void func_800D6EE0_BECB0_name_81(void) {
     s32 mesg;
@@ -119,30 +125,238 @@ static void func_800D6EE0_BECB0_name_81(void) {
     omDelPrcObj(NULL);
 }
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D7250_BF020_name_81);
+s32 func_800D7250_BF020_name_81(UnkEA790Struct* arg0, s32 arg1) {
+    if (arg0->proc != NULL) {
+        return osSendMesg(&arg0->unk10, (void* ) arg1, 0);
+    }
+    return - 1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D7280_BF050_name_81);
+static void func_800D7280_BF050_name_81(void) {
+    Vec stick;
+    Vec diff;
+    UnkEA790Struct *work;
+    GW_PLAYER *player;
+    s32 sel;
+    s32 i;
+    s16 run;
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D742C_BF1FC_name_81);
+    run = 1;
+    work = HuPrcCurrentGet()->user_data;
+    player = work->player;
+    sel = work->unk_0C;
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D7518_BF2E8_name_81);
+    while (run) {
+        HuPrcVSleep();
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D7568_BF338_name_81);
+        stick.x = D_800CBB6E_CC76E[work->unkE];
+        stick.z = D_800D20A1_D2CA1[work->unkE];
+        stick.z = -stick.z;
+        stick.y = 0.0f;
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D75E8_BF3B8_name_81);
+        if (func_800EBA50_D3820_name_81(work->unkE, 40.0f) != 0) {
+            for (i = 0; i < work->unk_02; i++) {
+                HuVecSubtract(&diff,
+                              &func_800D6EC8_BEC98_name_81(work, i)->obj->coords,
+                              &player->player_obj->coords);
+                diff.y = 0.0f;
+                if (func_800D7CEC_BFABC_name_81(&stick, &diff) <= 38.0f) {
+                    if (sel != i) {
+                        sel = i;
+                        func_800D7250_BF020_name_81(work, sel);
+                    }
+                    break;
+                }
+            }
+        }
 
+        if ((D_800C9520_CA120[work->unkE] & 0x8000) && (sel >= 0)) {
+            sel = -4;
+            func_800D7250_BF020_name_81(work, sel);
+            run = 0;
+        }
+    }
+    omDelPrcObj(NULL);
+}
+
+s32 func_800D742C_BF1FC_name_81(UnkEA790Struct* arg0, s16 playerNo, s32 arg2) {
+    GW_PLAYER* player;
+    Process* proc;
+
+    if (arg0->proc == NULL) {
+        proc = omAddPrcObj(func_800D6EE0_BECB0_name_81, 0xEFFF, 0x1000, 0);
+        arg0->proc = proc;
+        proc->user_data = arg0;
+        osCreateMesgQueue(&arg0->unk10, &arg0->unk28, 0x10);
+        arg0->unk_00 = arg2 | arg0->unk_00;
+        player = MBDGetPlayerStruct(playerNo);
+        if (player->stat & 1) {
+            arg0->unk_00 |= 1;
+            func_800D7250_BF020_name_81(arg0, -1);
+        } else {
+            arg0->unkE = player->pad;
+            omAddPrcObj(func_800D7280_BF050_name_81, 0xEFFF, 0x1000, 0)->user_data = arg0;
+        }
+        return player->stat & 1;
+    }
+    return -1;
+}
+
+s32 func_800D7518_BF2E8_name_81(UnkEA790Struct* arg0) {
+    if (arg0->proc != NULL) {
+        HuPrcChildLink(HuPrcCurrentGet(), arg0->proc);
+        HuPrcChildWait();
+        arg0->proc = NULL;
+    }
+    return arg0->unk_0C;
+}
+
+void func_800D7568_BF338_name_81(UnkBoard2* arg0, Vec* arg1, Vec* arg2, f32 arg3) {
+    Vec sp10;
+
+    MBDVecDirGet(arg1, arg2, &sp10);
+    HuVecCopy3F(&arg0->obj->rot, &sp10);
+    HuVecMulScalar(&sp10, arg3, &sp10);
+    HuVecAdd(&arg0->obj->coords, &sp10, arg1);
+}
+
+UnkEA790Struct* func_800D75E8_BF3B8_name_81(s16 arg0, s16* arg1, s32 arg2) {
+    GW_PLAYER* player;
+    UnkBoard2* temp_s0;
+    UnkEA790Struct* temp_v0;
+
+    player = MBDGetPlayerStruct(arg0);
+    temp_v0 = func_800D6C6C_BEA3C_name_81();
+    temp_v0->player = player;
+    for (; *arg1 >= 0; arg1++) {
+        temp_s0 = func_800D6B70_BE940_name_81(arg2);
+        func_800D7568_BF338_name_81(temp_s0, &player->player_obj->coords, &MBDMasuGet(*arg1)->coords, 12.0f);
+        func_800D6D2C_BEAFC_name_81(temp_v0, temp_s0, 0);        
+    }
+    
+    return temp_v0;
+}
+
+/*
+// Does not match because of trailing nops.
+UnkEA790Struct* func_800D76A0_BF470_name_81(s16 arg0, s16* arg1) {
+    return func_800D75E8_BF3B8_name_81(arg0, arg1, 0);
+}
+*/
 INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D76A0_BF470_name_81);
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D76D0_BF4A0_name_81);
+f32 MBDVecAngleGet(Vec *arg0) {
+    f32 temp_f16;
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D7828_BF5F8_name_81);
+    if (arg0->x != 0.0f || arg0->z != 0.0f) {
+        if (arg0->x == 0.0f) {
+            if (0.0f < arg0->z) {
+                return 0.0f;
+            }
+            return 180.0f;
+        }
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D7898_BF668_name_81);
+        if (arg0->z == 0.0f) {
+            if (0.0f < arg0->x) {
+                return 90.0f;
+            }
+            return 270.0f;
+        }
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D7934_BF704_name_81);
+        temp_f16 = _atan2d(arg0->z, arg0->x);
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D79D0_BF7A0_name_81);
+        if (arg0->z < 0.0f) {
+            temp_f16 = 90.0f - temp_f16;
+        } else {
+            temp_f16 = 90.0f - temp_f16;
+            if (temp_f16 < 0.0f) {
+                temp_f16 += 360.0f;
+            }
+        }
+        return temp_f16;
+    }
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D7A6C_BF83C_name_81);
+    return -1.0f;
+}
 
+void MBDVecNormalize(Vec *vec) { // MBDVecNormalize
+    if ((vec->x == 0.0f) && (vec->y == 0.0f) && (vec->z == 0.0f)) {
+        vec->z = 1.0f;
+    }
+
+    HuVecNormalize3F(vec);
+}
+
+void MBDVecRotateX(Vec *arg0, f32 arg1) {
+    Vec sp10;
+
+    sp10.y = arg0->y;
+    sp10.z = arg0->z;
+
+    arg0->y = ((HuMathCos(arg1) * sp10.y) - (HuMathSin(arg1) * sp10.z));
+    arg0->z = ((HuMathCos(arg1) * sp10.z) + (HuMathSin(arg1) * sp10.y));
+}
+
+void MBDVecRotateY(Vec *arg0, f32 arg1) {
+    Vec sp10;
+
+    sp10.x = arg0->x;
+    sp10.z = arg0->z;
+
+    arg0->x = ((HuMathCos(arg1) * sp10.x) + (HuMathSin(arg1) * sp10.z));
+    arg0->z = ((HuMathCos(arg1) * sp10.z) - (HuMathSin(arg1) * sp10.x));
+}
+
+void MBDVecRotateZ(Vec *arg0, f32 arg1) {
+    Vec sp10;
+
+    sp10.x = arg0->x;
+    sp10.y = arg0->y;
+
+    arg0->x = ((HuMathCos(arg1) * sp10.x) - (HuMathSin(arg1) * sp10.y));
+    arg0->y = ((HuMathCos(arg1) * sp10.y) + (HuMathSin(arg1) * sp10.x));
+}
+
+void func_800D7A6C_BF83C_name_81(Vec* arg0, Vec* arg1, f32 arg2) {
+    Vec origPos;
+    f32 temp_f2; //should be fs4
+    f32 temp_f3; //should be fs1
+    f32 temp_f4; //should be fs2
+    f32 temp_f5; //should be fs3
+    f32 temp_f0;
+    
+    // Store original vector
+    origPos.x = arg0->x;
+    origPos.y = arg0->y;
+    origPos.z = arg0->z;
+    
+    // Normalize the rotation axis
+    MBDVecNormalize(arg1);
+
+    arg0->x = ((arg1->x * arg1->x + (1.0f - arg1->x * arg1->x) * HuMathCos(arg2)) * origPos.x) +
+              ((arg1->x * arg1->y * (1.0f - HuMathCos(arg2)) - HuMathSin(arg2) * arg1->z) * origPos.y) +
+              ((arg1->x * arg1->z * (1.0f - HuMathCos(arg2)) + HuMathSin(arg2) * arg1->y) * origPos.z);
+
+    arg0->y = ((arg1->x * arg1->y * (1.0f - HuMathCos(arg2)) + HuMathSin(arg2) * arg1->z) * origPos.x) +
+              ((arg1->y * arg1->y + (1.0f - arg1->y * arg1->y) * HuMathCos(arg2)) * origPos.y) +
+              ((arg1->y * arg1->z * (1.0f -  HuMathCos(arg2)) - HuMathSin(arg2) * arg1->x) * origPos.z);
+    
+    arg0->z = ((arg1->x * arg1->z * (1.0f - HuMathCos(arg2)) - HuMathSin(arg2) * arg1->y) * origPos.x) +
+              ((arg1->y * arg1->z * (1.0f - HuMathCos(arg2)) + HuMathSin(arg2) * arg1->x) * origPos.y) +
+              ((arg1->z * arg1->z + (1.0f - arg1->z * arg1->z) * HuMathCos(arg2)) * origPos.z);
+}
+
+/*
+// Non-matching because of nops mid function
+f32 func_800D7CEC_BFABC_name_81(Vec *vec_1, Vec *vec_2) {
+    f32 length;
+    f32 dot;
+
+    dot = HuVecDot3F(vec_1, vec_2);
+    length = HuVecGetLength3F(vec_1) * HuVecGetLength3F(vec_2);
+    if (length != 0.0f) {
+        return func_8008D800_8E400(dot / length);
+    }
+}
+*/
 INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BECB0", func_800D7CEC_BFABC_name_81);

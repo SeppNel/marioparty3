@@ -1,21 +1,86 @@
 #include "common.h"
 #include "ovl_81.h"
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BFB40", func_800D7D70_name_81);
+extern s16 D_801029C8_name_81[128];
+extern ObjectName* D_801029C0_name_81;
+extern u16 D_801029C4_name_81;
+extern s16 D_80105624_name_81;
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BFB40", func_800D7DA0_name_81);
+static void func_800D7D70_name_81(void) {
+    s32 i;
+    
+    for (i = 0; i < ARRAY_COUNT(D_801029C8_name_81); i++) {
+        D_801029C8_name_81[i] = 0;
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BFB40", func_800D7DC8_name_81);
+static s16 func_800D7DA0_name_81(s16 arg0) {
+    D_801029C8_name_81[arg0]++;
+    return arg0;
+}
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BFB40", func_800D7E14_name_81);
+s16 func_800D7DC8_name_81(s32 arg0) {
+    s16 res = func_8001F1FC_main(DataRead(arg0), 8);
+    D_801029C8_name_81[res]++;
+    return res;
+}
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BFB40", func_800D7E68_name_81);
+void func_800D7E14_name_81(s16 arg0) {
+    if (D_801029C8_name_81[arg0] != 0) {
+        D_801029C8_name_81[arg0]--;
+        if (D_801029C8_name_81[arg0] == 0) {
+            func_8002D4B8_main(arg0);
+        }
+    }
+}
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BFB40", func_800D7EB8_name_81);
+static s16 func_800D7E68_name_81(s16 arg0) {
+    if (D_801029C8_name_81[arg0] != 0){
+        D_801029C8_name_81[arg0]++;
+        return arg0;
+    }
+    return -1;
+}
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BFB40", func_800D7F0C_name_81);
+void func_800D7EB8_name_81(void) {
+    D_801029C0_name_81 = NULL;
+    D_801029C4_name_81 = 0;
+    D_80105624_name_81 = 1;
+    func_800D7D70_name_81();
+    func_800D87DC_name_81(100.0f);
+    func_800D85A8_name_81(1.0f);
+}
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BFB40", func_800D7F4C_name_81);
+void func_800D7F0C_name_81(void) { // MBDModelClose
+    while (D_801029C0_name_81 != NULL) {
+        func_800D8F3C_name_81(D_801029C0_name_81);
+    }
+}
+
+ObjectName *func_800D7F4C_name_81(void) {
+    ObjectName *temp_v0;
+
+    temp_v0 = HuMemMemoryAllocTemp(sizeof(ObjectName));
+    if (temp_v0 != NULL) {
+        D_801029C4_name_81++;
+        temp_v0->prev = D_801029C0_name_81;
+        temp_v0->next = NULL;
+        if (D_801029C0_name_81 != NULL) {
+            D_801029C0_name_81->next = temp_v0;
+        }
+        D_801029C0_name_81 = temp_v0;
+        temp_v0->flags = 8;
+        HuVecCopyXYZ(&temp_v0->coords, 0.0f, 0.0f, 0.0f);
+        HuVecCopyXYZ(&temp_v0->rot, 0.0f, 0.0f, 1.0f);
+        HuVecCopyXYZ(&temp_v0->scale, 1.0f, 1.0f, 1.0f);
+        temp_v0->velocity.x = 0.0f;
+        temp_v0->velocity.y = 0.0f;
+        temp_v0->velocity.z = 0.0f;
+        temp_v0->unk46 = -1;
+        temp_v0->unk48 = -1;
+    }
+    return temp_v0;
+}
 
 INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BFB40", func_800D8010_name_81);
 
@@ -63,7 +128,14 @@ INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BFB40", func_800D94C4_name_81
 
 INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BFB40", func_800D9668_name_81);
 
-INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BFB40", func_800D96F4_name_81);
+void func_800D96F4_name_81(void) {
+    ObjectName *obj = *(ObjectName **)HuPrcCurrentGet()->user_data;
+
+    func_8001C814_main(obj->omObj1->model[0], 3, 0);
+    func_800EFABC_name_81(obj);
+    func_800D8F3C_name_81(obj);
+    omDelPrcObj(NULL);
+}
 
 INCLUDE_ASM("asm/nonmatchings/overlays/ovl_81_name/BFB40", func_800D974C_name_81);
 

@@ -917,7 +917,7 @@ void func_800E8194_name_81(void) {
         } else {
             D_80102D30_name_81 |= 2;
             if ((D_80102D2C_name_81 >= 0.0f) && (D_80102D2C_name_81 < temp_f2)) {
-                func_800D7828_name_81(&sp38);
+                MBDVecNormalize(&sp38);
                 HuVecMulScalar(&sp38, D_80102D2C_name_81 * 4.0f, &sp38);
             }
             D_80104848_name_81[0] += sp38.x;

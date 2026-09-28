@@ -16,6 +16,8 @@ tools/bin
 tools/gcc_2.7.2
 tools/ido_recomp
 tools/slinky
+tools/decomp-permuter
+nonmatchings/
 .ninja_deps
 .ninja_log
 .vscode/configurationCache.log

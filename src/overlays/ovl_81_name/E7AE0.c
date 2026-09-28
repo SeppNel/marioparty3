@@ -11,7 +11,7 @@ extern UnkBoard4 *D_80105504_name_81;
 extern s16 D_80105508_name_81[UNK_ARR_SIZE][2];
 extern UnkBoard4 *D_80105518_name_81;
 extern Process *D_8010551C_name_81;
-extern Object *D_80105520_name_81[MBD_MAX_PLAYERS];
+extern ObjectDuel *D_80105520_name_81[MBD_MAX_PLAYERS];
 extern f32 D_80105528_name_81;
 extern Vec2f D_8010552C_name_81;
 
@@ -227,12 +227,12 @@ void func_801005DC_name_81(UnkBoard4 *arg0) {
 void func_80100604_name_81(void) {
     GW_PLAYER *temp_v0;
     s32 i;
-    Object **obj;
-    Object *temp_a0;
+    ObjectDuel **obj;
+    ObjectDuel *temp_a0;
 
     for (i = 0; i < MBD_MAX_PLAYERS; i++) {
         temp_v0 = MBDGetPlayerStruct(i);
-        D_80105520_name_81[i] = func_800D8314_name_81(D_80101BD8_name_81[temp_v0->chr], 9, 1.0f, D_80101B20_name_81[temp_v0->chr], 0);
+        D_80105520_name_81[i] = MBDModelFileCreate(D_80101BD8_name_81[temp_v0->chr], 9, 1.0f, D_80101B20_name_81[temp_v0->chr], 0);
         obj = &D_80105520_name_81[i]; // TODO: this is odd
         Hu3DModelScaleSet(D_80105520_name_81[i]->omObj1->model[0], 0.0f, 0.0f, 0.0f);
         Hu3DModelScaleSet((*obj)->omObj2->model[0], 0.0f, 0.0f, 0.0f);
@@ -241,8 +241,8 @@ void func_80100604_name_81(void) {
 
     for (i = 0; i < MBD_MAX_PLAYERS; i++) {
         temp_v0 = MBDGetPlayerStruct(i);
-        temp_a0 = temp_v0->player_obj;
-        temp_v0->player_obj = D_80105520_name_81[i];
+        temp_a0 = (ObjectDuel *)temp_v0->player_obj;
+        temp_v0->player_obj = (Object*)D_80105520_name_81[i];
         D_80105520_name_81[i] = temp_a0;
     }
 
@@ -253,26 +253,26 @@ void func_80100604_name_81(void) {
     HuPrcVSleep();
 
     for (i = 0; i < MBD_MAX_PLAYERS; i++) {
-        func_800D8F0C_name_81(D_80105520_name_81[i]);
+        MBDModelDispOff(D_80105520_name_81[i]);
     }
 }
 
 void func_801007C4_name_81(void) {
     GW_PLAYER *temp_v0;
-    Object *temp_a0;
+    ObjectDuel *temp_a0;
     s32 i;
 
     for (i = 0; i < MBD_MAX_PLAYERS; i++) {
         temp_v0 = MBDGetPlayerStruct(i);
-        temp_a0 = temp_v0->player_obj;
-        temp_v0->player_obj = D_80105520_name_81[i];
+        temp_a0 = (ObjectDuel *)temp_v0->player_obj;
+        temp_v0->player_obj = (Object*)D_80105520_name_81[i];
         D_80105520_name_81[i] = temp_a0;
     }
 
     for (i = 0; i < MBD_MAX_PLAYERS; i++) {
         temp_v0 = MBDGetPlayerStruct(i);
-        func_800D8E88_name_81(temp_v0->player_obj);
-        func_800D8F3C_name_81(D_80105520_name_81[i]);
+        MBDModelDispOn((ObjectDuel *) temp_v0->player_obj);
+        MBDModelKill(D_80105520_name_81[i]);
     }
 }
 

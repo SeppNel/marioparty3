@@ -4,7 +4,6 @@
 UnkBoard2* func_800D6EC8_name_81(UnkEA790Struct*, s16);
 s16 func_800EBA50_name_81(s16, f32);
 f32 func_800D7CEC_name_81(Vec*, Vec*);
-f32 _atan2d(f32, f32);
 void HuVecNormalize3F(Vec *);
 f32 func_8008D800_main(f32);
 f32 HuVecDot3F(Vec *, Vec *);
@@ -263,7 +262,7 @@ f32 MBDVecAngleGet(Vec *arg0) {
             return 270.0f;
         }
 
-        temp_f16 = _atan2d(arg0->z, arg0->x);
+        temp_f16 = atan2df(arg0->z, arg0->x);
 
         if (arg0->z < 0.0f) {
             temp_f16 = 90.0f - temp_f16;

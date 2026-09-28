@@ -4,7 +4,7 @@
 typedef struct UnkBE940 {
     /* 0x00 */ s16 unk_00;
     /* 0x02 */ char unk_02;
-    /* 0x04 */ Object *unk_04;
+    /* 0x04 */ ObjectDuel *unk_04;
 } UnkBE940; // sizeof 0x08
 
 typedef struct UnkBE940_3 {
@@ -17,7 +17,7 @@ typedef struct UnkBE940_3 {
 void *func_800D6B70_BE940_name_81(s32 arg0) {
     s32 sp10[3] = { 0x00000017, 0x00000018, 0x00000019 };
     UnkBE940 *temp_v0;
-    Object *temp_v0_2;
+    ObjectDuel *temp_v0_2;
 
     temp_v0 = HuMemMemoryAllocTemp(sizeof(UnkBE940));
     temp_v0->unk_00 = 0;
@@ -26,12 +26,12 @@ void *func_800D6B70_BE940_name_81(s32 arg0) {
     func_8001C258_1CE58(temp_v0_2->omObj1->model[0], 0x180, 0);
     func_8001C8E4_1D4E4(temp_v0->unk_04->omObj1->model[0], 0x1400);
     func_8001C448_1D048(temp_v0->unk_04->omObj1->model[0]);
-    func_800D8944_C0714_name_81(temp_v0->unk_04);
+    MBDModelTempAllocFree(temp_v0->unk_04);
     return temp_v0;
 }
 
 void func_800D6C3C_BEA0C_name_81(UnkBE940 *arg0) {
-    func_800D8F3C_C0D0C_name_81(arg0->unk_04);
+    MBDModelKill(arg0->unk_04);
     HuMemMemoryFreeTemp(arg0);
 }
 

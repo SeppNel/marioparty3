@@ -4,7 +4,25 @@
 #include "game/window.h"
 #include "malloc.h"
 
-typedef void (*PartnerFunc)(s16, s32, Object*, Object*, s32, s32);
+// same as Object, but with an extra s16 at 0x44 that shifts Object's unk44/unk46 to 0x46/0x48
+typedef struct ObjectDuel {
+    /* 0x00 */ struct ObjectDuel *prev;
+    /* 0x04 */ struct ObjectDuel *next;
+    /* 0x08 */ u8 unk8;
+    /* 0x09 */ s8 unk9;
+    /* 0x0A */ u16 flags;
+    /* 0x0C */ Vec coords;
+    /* 0x18 */ Vec rot;
+    /* 0x24 */ Vec scale;
+    /* 0x30 */ Vec velocity;
+    /* 0x3C */ omObjData* omObj1;
+    /* 0x40 */ omObjData* omObj2; 
+    /* 0x44 */ s16 mtncnt; // -1 when the model has no motion table
+    /* 0x46 */ s16 unk46;  // Object::unk44
+    /* 0x48 */ s16 unk48;  // Object::unk46
+} ObjectDuel; // sizeof 0x4C (0x4A padded to 4-byte alignment)
+
+typedef void (*PartnerFunc)(s16, s32, ObjectDuel*, ObjectDuel*, s32, s32);
 
 typedef enum PartnerObjIndex {
     /* 0 */ PARTNEROBJINDEX_FRONT,
@@ -23,8 +41,8 @@ typedef struct PartnerBaseAttributes {
     /* 0x01 */ u8 hp;
     /* 0x02 */ s8 power;
     /* 0x03 */ s8 cost;
-    /* 0x04 */ void (*func1)(s16, s32, Object*, Object*, s32, s32);
-    /* 0x08 */ void (*func2)(s16, s32, Object*, Object*, s32, s32);
+    /* 0x04 */ void (*func1)(s16, s32, ObjectDuel*, ObjectDuel*, s32, s32);
+    /* 0x08 */ void (*func2)(s16, s32, ObjectDuel*, ObjectDuel*, s32, s32);
     /* 0x0C */ void (*func3)(void);
     /* 0x10 */ void (*func4)(void);
 } PartnerBaseAttributes; //sizeof 0x14
@@ -62,28 +80,10 @@ typedef struct UnkBE940_2 {
     /* 0x68 */ s32 unk_68;
 } UnkBE940_2; // sizeof 0x6C
 
-// same as Object, but with an extra 4 bytes
-typedef struct ObjectName {
-    /* 0x00 */ struct ObjectName *prev;
-    /* 0x04 */ struct ObjectName *next;
-    /* 0x08 */ u8 unk8;
-    /* 0x09 */ s8 unk9;
-    /* 0x0A */ u16 flags;
-    /* 0x0C */ Vec coords;
-    /* 0x18 */ Vec rot;
-    /* 0x24 */ Vec scale;
-    /* 0x30 */ Vec velocity;
-    /* 0x3C */ omObjData* omObj1;
-    /* 0x40 */ omObjData* omObj2; 
-    /* 0x44 */ s16 unk44;
-    /* 0x46 */ s16 unk46;
-    /* 0x48 */ s16 unk48;
-} ObjectName; // sizeof 0x4C
-
 extern UnkBoard4* D_80105400_ED1D0_name_81;
 extern u16 D_80105404_ED1D4_name_81;
 extern PartnerBaseAttributes PartnersBaseStats[];
-extern Object* Duel_PartnerObjects[][PARTNEROBJINDEX_MAX];
+extern ObjectDuel* Duel_PartnerObjects[][PARTNEROBJINDEX_MAX];
 extern process_func D_80101A90_E9860_name_81;
 extern s32 D_80101A94_E9864_name_81;
 extern s32 D_80101A98_E9868_name_81;
@@ -91,7 +91,7 @@ extern s16 D_80105494_ED264_name_81;
 extern s16 D_80105496_ED266_name_81;
 extern u8* D_80101980_E9750_name_81;
 extern s32 D_80101984_E9754_name_81;
-extern Object* D_80101988_E9758_name_81;
+extern ObjectDuel* D_80101988_E9758_name_81;
 extern s32* D_801017DC_E95AC_name_81[];
 extern Process* D_8010195C_E972C_name_81;
 extern s32* D_8010180C_E95DC_name_81[];
@@ -145,10 +145,10 @@ u16 MBDCameraPos2DSet(Vec2f*);
 void MBDCameraPos2DGet(Vec2f*);
 f32 MBDCameraSpeedGet(void);
 void func_80100124_E7EF4_name_81(UnkBoard4*, s32);
-Object* func_800D8314_C00E4_name_81(s32, s32, f32, f32, s32);
+ObjectDuel* MBDModelFileCreate(s32, s32, f32, f32, u32*);
 void func_800FCF50_E4D20_name_81(s32, s32);
-void func_800D8E88_C0C58_name_81(Object*);
-void func_800D8F3C_C0D0C_name_81(ObjectName*);
+void MBDModelDispOn(ObjectDuel*);
+void MBDModelKill(ObjectDuel*);
 void func_800F8C68_E0A38_name_81(s32);
 void func_80100604_E83D4_name_81(void);
 s32 func_800F89D0_E07A0_name_81(s32 playerIndex, s32 frontOrBackIndex, s16 arg2, s16 arg3);
@@ -184,14 +184,14 @@ s32 func_800E1824_C95F4_name_81(s32, s32, s32);
 void func_800E1854_C9624_name_81(s32);
 void func_800F4584_DC354_name_81(UnkBoard4*);
 void func_800FAD04_E2AD4_name_81(s32 arg0);
-void func_800D8F0C_C0CDC_name_81(Object*);
+void MBDModelDispOff(ObjectDuel*);
 GW_PLAYER* MBDGetPlayerStruct(s32 playerIndex);
-Object* MBDGetPlayerPartnerRef(s32 playerIndex, s32 frontOrBackIndex);
+ObjectDuel* MBDGetPlayerPartnerRef(s32 playerIndex, s32 frontOrBackIndex);
 void func_800ECF1C_D4CEC_name_81(s32, Vec*, Vec*);
 void MBDVecNormalize(Vec*);
 void MBDVecRotateY(Vec*, f32);
 void func_800D7EB8_BFC88_name_81(void);
-void func_800D8944_C0714_name_81(Object*);
+void MBDModelTempAllocFree(ObjectDuel*);
 void func_800DAB1C_C28EC_name_81(void);
 void func_800DF1B0_C6F80_name_81(void);
 void func_800E0CEC_C8ABC_name_81(void);
@@ -218,25 +218,25 @@ void func_800E8110_CFEE0_name_81(void);
 void func_800E8180_CFF50_name_81(f32, f32);
 void func_800ED214_D4FE4_name_81(s32 playerIndex);
 void func_800F82EC_E00BC_name_81(s32);
-Object* func_800D8010_BFDE0_name_81(u8, s32*);
-Object* func_800F8034_DFE04_name_81(s32);
-Object* func_800F8050_DFE20_name_81(s32);
+ObjectDuel* func_800D8010_BFDE0_name_81(u8, s32*);
+ObjectDuel* func_800F8034_DFE04_name_81(s32);
+ObjectDuel* func_800F8050_DFE20_name_81(s32);
 void func_800F8108_DFED8_name_81(s32 playerIndex);
 void func_800F85A4_E0374_name_81(s32 playerIndex, s32 frontOrBackIndex);
-void func_800D90D0_C0EA0_name_81(Object*, s16, u16);
+void MBDMotionSet(ObjectDuel*, s16, u16);
 s16 MBDGetCurrentPlayerIndex(void);
-void func_800D918C_C0F5C_name_81(Object*, s16, s16, s16, s32);
+void MBDMotionShiftSet(ObjectDuel*, s16, s16, s16, u16);
 s32 func_800EFE20_D7BF0_name_81(f32);
 void func_800FB160_E2F30_name_81(void);
-void func_800D90D0_C0EA0_name_81(Object*, s16, u16);
 void func_800FAEFC_E2CCC_name_81(s32);
-void func_800FB038_E2E08_name_81(Object*, s16, u16);
+void func_800FB038_E2E08_name_81(ObjectDuel*, s16, u16);
 void func_800EB278_D3048_name_81(void);
 void func_800EB29C_D306C_name_81(void);
 void func_800EB58C_D335C_name_81(void);
 void func_800FA120_E1EF0_name_81(void);
 void func_800FC8C4_E4694_name_81(Vec*);
 void func_800EAB6C_D293C_name_81(s32, s32);
+f32 MBDVecAngleGet(Vec *arg0);
 
 extern Vec D_80105460_ED230_name_81;
 extern s32 D_801019E0_E97B0_name_81[][2];

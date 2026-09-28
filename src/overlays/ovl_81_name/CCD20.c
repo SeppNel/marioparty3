@@ -96,7 +96,7 @@ extern UnkBoard7 D_80104850_EC620_name_81[64];
 extern s32 D_8010105C_E8E2C_name_81;
 extern s32 D_80105050_ECE20_name_81;
 extern Process* D_80101058_E8E28_name_81;
-extern Object* D_80105058_ECE28_name_81[16];
+extern ObjectDuel* D_80105058_ECE28_name_81[16];
 
 static s32 func_800E5CC4_CDA94_name_81(u16);
 void func_800E77D8_CF5A8_name_81(Gfx** arg0, s32 arg1, u8 arg2);
@@ -1318,7 +1318,7 @@ void func_800E919C_D0F6C_name_81(void) {
 
     for (i = 0; i < ARRAY_COUNT(D_80105058_ECE28_name_81); i++) {
         if (D_80105058_ECE28_name_81[i] != NULL) {
-            func_800D8F3C_C0D0C_name_81(D_80105058_ECE28_name_81[i]);
+            MBDModelKill(D_80105058_ECE28_name_81[i]);
             D_80105058_ECE28_name_81[i] = NULL;
         }
     }

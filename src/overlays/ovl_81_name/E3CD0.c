@@ -138,7 +138,7 @@ void func_800FC260_E4030_name_81(s32 arg0, s16 arg1) {
     UnkOvl81_1 *temp_v0_3;
     s32 frontPartnerID;
     s32 backPartnerID;
-    Object *playerObj;
+    ObjectDuel *playerObj;
     s32 i;
 
     func_800E8D10_D0AE0_name_81();
@@ -160,10 +160,10 @@ void func_800FC260_E4030_name_81(s32 arg0, s16 arg1) {
     func_800F3DFC_DBBCC_name_81(1);
 
     for (i = 0; i < MBD_MAX_PLAYERS; i++) {
-        func_800D8944_C0714_name_81(MBDGetPlayerStruct(i)->player_obj);
-        playerObj = MBDGetPlayerStruct(i)->player_obj;
+        MBDModelTempAllocFree((ObjectDuel *) MBDGetPlayerStruct(i)->player_obj);
+        playerObj = (ObjectDuel *) MBDGetPlayerStruct(i)->player_obj;
         playerObj->flags |= 2;
-        func_800D8E88_C0C58_name_81(MBDGetPlayerStruct(i)->player_obj);
+        MBDModelDispOn((ObjectDuel *) MBDGetPlayerStruct(i)->player_obj);
     }
 
     func_8001FDE8_209E8(MBDGetPlayerStruct(0)->player_obj->omObj1->model[0]);

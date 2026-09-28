@@ -97,22 +97,20 @@ void func_80106240_3D9330_duel01(void) {
     func_800FC8C4_E4694_name_81(&D_80105540_ED310_name_81);
 }
 
-// TODO: arg0 is a pointer
-void func_80106260_3D9350_duel01(s32 arg0, unkStruct05 *arg1, s32 arg2, f32 arg3) {
+void func_80106260_3D9350_duel01(ObjectDuel *arg0, GW_PLAYER *arg1, s32 arg2, f32 arg3) {
     arg3 = arg3 + 0.5f;
     if (arg2 & 9) {
-        func_800EC1E4_D3FB4_name_81(&D_80105540_ED310_name_81, arg0 + 0xC, &D_80105540_ED310_name_81, arg3);
+        func_800EC1E4_D3FB4_name_81(&D_80105540_ED310_name_81, &arg0->coords, &D_80105540_ED310_name_81, arg3);
     } else {
-        func_800EC1E4_D3FB4_name_81(&D_80105540_ED310_name_81, arg1->unk_24 + 0xC, &D_80105540_ED310_name_81, arg3);
+        func_800EC1E4_D3FB4_name_81(&D_80105540_ED310_name_81, &arg1->player_obj->coords, &D_80105540_ED310_name_81, arg3);
     }
 }
 
-// TODO: arg0 is a pointer
-void func_801062C0_3D93B0_duel01(s32 arg0, unkStruct05 *arg1, s32 arg2, f32 arg3) {
+void func_801062C0_3D93B0_duel01(ObjectDuel *arg0, GW_PLAYER *arg1, s32 arg2, s32 arg3) {
     if (arg2 & 9) {
-        func_800EBF2C_D3CFC_name_81(&D_80105540_ED310_name_81, arg0 + 0xC, &D_80105540_ED310_name_81);
+        func_800EBF2C_D3CFC_name_81(&D_80105540_ED310_name_81, &arg0->coords, &D_80105540_ED310_name_81, arg3);
     } else {
-        func_800EBF2C_D3CFC_name_81(&D_80105540_ED310_name_81, arg1->unk_24 + 0xC, &D_80105540_ED310_name_81);
+        func_800EBF2C_D3CFC_name_81(&D_80105540_ED310_name_81, &arg1->player_obj->coords, &D_80105540_ED310_name_81, arg3);
     }
 }
 
@@ -133,20 +131,20 @@ Process *func_8010645C_3D954C_duel01(s32 arg0, s32 arg1) {
 INCLUDE_ASM("asm/nonmatchings/overlays/duel01/3D8AC0", func_801064C8_3D95B8_duel01);
 
 void *func_80106740_3D9830_duel01(s32 arg0) {
-    Object *obj;
+    ObjectDuel *obj;
 
     obj = func_800D8010_BFDE0_name_81(arg0 & 0xFF, 0);
     func_8001C258_1CE58(obj->omObj1->model[0], 0x180, 0);
     func_8001C8E4_1D4E4(obj->omObj1->model[0], 0x1800);
     func_8001C448_1D048(obj->omObj1->model[0]);
-    func_800D8944_C0714_name_81(obj);
-    func_800D8F0C_C0CDC_name_81(obj);
+    MBDModelTempAllocFree(obj);
+    MBDModelDispOff(obj);
     func_8001C814_1D414(obj->omObj1->model[0], 2, 1);
     return obj;
 }
 
-void func_801067D4_3D98C4_duel01(Object *arg0, Vec *arg1) {
-    func_800D8E88_C0C58_name_81();
+void func_801067D4_3D98C4_duel01(ObjectDuel *arg0, Vec *arg1) {
+    MBDModelDispOn(arg0);
     func_8001C814_1D414(arg0->omObj1->model[0], 3, 0);
     HuVecCopy3F(&arg0->coords, arg1);
 }

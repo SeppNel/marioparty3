@@ -86,7 +86,7 @@ void func_800ED214_D4FE4_name_81(s32 playerIndex) {
     Vec sp10;
     Vec sp20;
     GW_PLAYER *player = MBDGetPlayerStruct(playerIndex);
-    Object *partner;
+    ObjectDuel *partner;
 
     func_800ECF1C_D4CEC_name_81(playerIndex, &sp10, &sp20);
 

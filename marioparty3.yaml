@@ -591,6 +591,7 @@ segments:
     subsegments:
       - [0xBE940, c]
       - [0xBECB0, c]
+      - [0xBF4A0, c]
       - [0xBFB40, c]
       - [0xC1580, c]
       - [0xC1BA0, c]
